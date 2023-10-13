@@ -83,7 +83,7 @@ function comparar (){
 function encontrar(){
     let ver1= prompt ('Ingresa el valor del elemento que deseas ver/encontrar');
     const pista1 = numeros.find((numero) => numero === ver1);
-    alert ('El elemento '+ pista1 +' se encuentra en la posicion'+ numeros.indexOf(pista1))
+    alert ('El elemento '+ pista1 +' se encuentra en la posicion'+ numeros.indexOf(pista1));
     usuario1.conteoPistas();
 }
 
