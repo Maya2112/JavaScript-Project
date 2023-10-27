@@ -1,13 +1,49 @@
-let encontrados = 0;
-let posicion1;
-let valor1;
-let posicion2;
-let valor2;
-let continuar = true;
 
-const numeros = [21, 11, 22, 12, 15, 15, 22, 21, 11, 12];
+
+
+const cards = [{
+    id: 21,
+    thumbnail: './images/harry.jpeg',
+},
+{
+    id:11,
+    thumbnail: './images/hermione.jpeg',
+},
+{
+    id:22,
+    thumbnail: './images/ron.jpeg',
+},
+{
+    id:12,
+    thumbnail: './images/castillo.jpeg',
+},
+{
+    id:15,
+    thumbnail: './images/tres.jpeg',
+},
+{
+    id:15,
+    thumbnail: './images/hppatronus.jpeg',
+},
+{
+    id:22,
+    thumbnail: './images/herpatronus.jpeg',
+},
+{
+    id:21,
+    thumbnail: './images/ronpatronus.jpeg',
+},
+{
+    id:11,
+    thumbnail: './images/expreso.jpeg',
+},
+{
+    id:12,
+    thumbnail: './images/HOGWARTSes.jpeg',
+}];
+
 const posicion = [];
-
+let encontrados = 0;
 
 class usuario{
     constructor(nombre, casa){
@@ -26,13 +62,92 @@ class usuario{
     }
 }
 
-alert ('***JUEGO DE MEMORIA*** ');
-let userName = prompt ('Ingresa tu nombre: ');
-let casaH = prompt ('Ingresa tu casa de Hogwarts: \n Gryffindor  Revenclaw\n Hufflepuff  Slytherin');
+const userData = () => {
 
-const usuario1 = new usuario (userName, casaH);
+    message.remove();
+    localStorage.clear();
+    const form = document.querySelector('#form');
+    const formContainer = document.querySelector('.form-container-inputs');
 
-alert ('Bienvenido/a '+ usuario1.nombre +' de la casa '+ usuario1.casa);
+    const getUserData = () =>{
+
+        const userName = document.querySelector('#name').value;
+        const casaH = document.querySelector('#casa').value;
+        const usuario1 = new usuario (userName, casaH);
+        localStorage.setItem('userTurn', JSON.stringify(usuario1));
+        
+    }
+        form.innerHTML = `
+        <div>
+            <label for="name">Ingresa tu nombre:</label>
+            <input id="name" placeholder="Ingresa tu nombre" type"text">
+        </div>
+        <div>
+            <label for="casa">Ingresa tu casa de hogwarts:</label>
+            <input id="casa" placeholder="Ingresa tu casa de hogwarts" type"text">
+        </div>
+        <button class="btn" id="save-button">Empezar</button>
+        `;
+    
+        const saveButton = document.getElementById("save-button");
+        saveButton.addEventListener("click", getUserData);
+
+        form.appendChild(formContainer);
+
+        return form;
+}
+
+const Card = (prop) => {
+
+    let { id, thumbnail} = prop;
+    let divcard = document.createElement("div");
+    divcard.className= "card-content";
+    divcard.innerHTML =
+        `
+        <a data-id=${id} class="card-link"><img src=${thumbnail} alt=""></img></a>
+    `;
+
+    /*const selectedCard = divcard.querySelector('.card-link');
+    selectedCard.addEventListener('click', ());*/
+
+    return divcard;
+}
+
+const tableContainer = (props) => {
+
+    let { cartas } = props;
+    let section = document.createElement("section");
+    section.className ="table-container";
+    cartas.forEach(carta => {
+        const card = Card(carta);
+        section.appendChild(card);
+    });
+    return section;
+}
+
+
+const div = document.getElementById("container");
+
+const message = document.createElement("p");
+message.className="start";
+message.innerText = "Haz click para empezar a jugar";
+div.appendChild(message);
+message.addEventListener("click", userData);
+
+
+const data = JSON.parse(localStorage.getItem('userTurn'));
+
+if (data){
+message.remove();
+const userInfo = document.createElement("p");
+userInfo.className="welcome";
+userInfo.innerText = `Bienvenido ${data.nombre} de la casa ${data.casa}`;
+div.appendChild(userInfo);
+div.appendChild(tableContainer({cartas:cards}));
+}
+
+localStorage.clear();
+/*
 
 function seleccion1(){
     do { 
@@ -82,7 +197,7 @@ function comparar (){
 
 function encontrar(){
     let ver1= prompt ('Ingresa el valor del elemento que deseas ver/encontrar');
-    const pista1 = numeros.find((numero) => numero === ver1);
+    const pista1 = numeros.find(numero => numero === ver1);
     alert ('El elemento '+ pista1 +' se encuentra en la posicion'+ numeros.indexOf(pista1));
     usuario1.conteoPistas();
 }
@@ -119,4 +234,4 @@ do{
 if(encontrados===5){
     usuario1.ganaste();
     alert ('Ganaste!')
-}
+}*/
