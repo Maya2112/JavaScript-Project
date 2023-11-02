@@ -75,10 +75,34 @@ footer{
     animation: destello 2s infinite; /* Aplicar la animación destello de forma infinita */
 }
 
+.user-table{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
 .welcome {
     font-size: 70px;
     color: #FFD700; 
     text-shadow: black 1px 0 10px;
+}
+
+.hints{
+    display: flex;
+    font-size: 50px;
+    color: #FFD700; 
+    text-shadow: black 1px 0 10px;
+}
+
+.btn-hints{
+    width: 70px;
+    height: 35px;
+    color:goldenrod;
+    border-radius: 5px;
+    font-size: 25px;
+    box-shadow: 1px 1px 1px 1px rgba(218, 165, 32, 0.788);
+    text-align: center;
 }
 
 .caja{
@@ -126,19 +150,36 @@ footer{
     padding: 1rem;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     gap: 1rem;
 }
 
-.card-content {
+.card-content{
     width: 150px;
     height: 50%;
-    box-shadow: #ffa1f62d 0px 10px 36px 0px, #ffa1f62d 0px 0px 0px 1px;
+    box-shadow: black 0px 10px 36px 0px, black 0px 0px 0px 1px;
 }
 
 .card-content img {
     width: 150px;
     height: 100%;
     object-fit: cover;
+}
+
+.content{
+    width: 150px;
+    height: 50%;
+    text-align: center;
+    font-size: 50px;
+    color: goldenrod;
+    background-color: grey;
+    box-shadow: black 0px 10px 36px 0px, black 0px 0px 0px 1px;
+}
+
+.alerta{
+    position: relative;
+    font-size: 70px;
+    text-shadow: black 1px 0 10px;
+    color: goldenrod;
 }

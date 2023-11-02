@@ -1,6 +1,3 @@
-
-
-
 const cards = [{
     id: 21,
     thumbnail: './images/harry.jpeg',
@@ -42,8 +39,14 @@ const cards = [{
     thumbnail: './images/HOGWARTSes.jpeg',
 }];
 
-const posicion = [];
-let encontrados = 0;
+let cardUp = [];
+let posicion = [];
+let found = 0;
+
+const div = document.getElementById("container");
+const message = document.createElement("p");
+const ganar = document.createElement("p");
+const data = JSON.parse(localStorage.getItem('userTurn'));
 
 class usuario{
     constructor(nombre, casa){
@@ -52,30 +55,20 @@ class usuario{
         this.ganador=false;
         this.hints=2;
     }
-
-    conteoPistas(){
-        this.hints=this.hints-1;
-    }
-
-    ganaste(){
-        this.ganador=true;
-    }
 }
 
 const userData = () => {
 
     message.remove();
-    localStorage.clear();
+    
     const form = document.querySelector('#form');
     const formContainer = document.querySelector('.form-container-inputs');
 
     const getUserData = () =>{
-
         const userName = document.querySelector('#name').value;
         const casaH = document.querySelector('#casa').value;
         const usuario1 = new usuario (userName, casaH);
-        localStorage.setItem('userTurn', JSON.stringify(usuario1));
-        
+        localStorage.setItem('userTurn', JSON.stringify(usuario1));  
     }
         form.innerHTML = `
         <div>
@@ -107,8 +100,8 @@ const Card = (prop) => {
         <a data-id=${id} class="card-link"><img src=${thumbnail} alt=""></img></a>
     `;
 
-    /*const selectedCard = divcard.querySelector('.card-link');
-    selectedCard.addEventListener('click', ());*/
+    const selectedCard = divcard.querySelector('.card-link');
+    selectedCard.addEventListener('click', () => selection(prop));
 
     return divcard;
 }
@@ -125,113 +118,100 @@ const tableContainer = (props) => {
     return section;
 }
 
+const userTable = ()=>{
+    const userInfo = document.createElement("div");
+    userInfo.className="user-table";
+    userInfo.innerHTML = `
+    <p class = "welcome">Bienvenido ${data.nombre} de la casa ${data.casa}</p>
+    <p class = "welcome">Pares encontrados: ${found}</p>
+    <div class ="hints">
+        <p>Hints: ${data.hints}</p>
+        <button class="btn-hints" id="hints-button">Usar</button>
+    </div>`;
 
-const div = document.getElementById("container");
-
-const message = document.createElement("p");
-message.className="start";
-message.innerText = "Haz click para empezar a jugar";
-div.appendChild(message);
-message.addEventListener("click", userData);
-
-
-const data = JSON.parse(localStorage.getItem('userTurn'));
-
-if (data){
-message.remove();
-const userInfo = document.createElement("p");
-userInfo.className="welcome";
-userInfo.innerText = `Bienvenido ${data.nombre} de la casa ${data.casa}`;
-div.appendChild(userInfo);
-div.appendChild(tableContainer({cartas:cards}));
+    div.appendChild(userInfo);
 }
 
-localStorage.clear();
-/*
-
-function seleccion1(){
-    do { 
-        posicion1 = prompt ('Elige 1era posicion a descubrir: \n #0  #1  #2  #3  #4 \n #5  #6  #7  #8  #9 ');
-        const igual = posicion.includes(posicion1);
-        if (igual){
-            alert ('Esta posicion ya ha sido descubierta, elige otra');
-            continuar = true;
-        }else{
-            valor1 = numeros[posicion1];
-            alert ('El elemento en la posicion #'+ posicion1 +' es : '+ valor1);
-            continuar = false;
-            break;
-        }
-    }while (continuar == true)
-}
-
-function seleccion2(){
-    do{
-        posicion2 = prompt ('Elige 2da posicion a descubrir: \n #0  #1  #2  #3  #4 \n #5  #6  #7  #8  #9 ');
-        const igual = posicion.includes(posicion2);
-        if (posicion2 === posicion1){
-            alert ('Es la misma posicion que elegiste primero, elige otra');
-            continuar = true;
-        }else if(igual){
-            alert ('Esta posicion ya ha sido descubierta, elige otra');
-            continuar = true;
-        }else{
-            valor2 = numeros[posicion2];
-            alert ('El elemento en la posicion #'+ posicion2 +' es : '+ valor2);
-            continuar = false;
-            break;
-        }
-    }while (continuar == true);
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
 }
 
 function comparar (){
-    if (valor1 === valor2){
-        encontrados = encontrados +1;
-        alert('Has encontrado '+ encontrados +' par/es de 5');
-        posicion.unshift(posicion1);
-        posicion.push(posicion2);
-    }else{
-        alert('No son iguales, sigue intentado');
-    }
-}
 
-function encontrar(){
-    let ver1= prompt ('Ingresa el valor del elemento que deseas ver/encontrar');
-    const pista1 = numeros.find(numero => numero === ver1);
-    alert ('El elemento '+ pista1 +' se encuentra en la posicion'+ numeros.indexOf(pista1));
-    usuario1.conteoPistas();
-}
+    const [card1, card2] = cardUp;
+    console.log(cardUp);
+    if (card1.id === card2.id) {
+        
+        posicion.push(card1);
+        posicion.unshift(card2);
+        cardUp = [];
+        found=found+1;
+        console.log(found);
+        if (found === cards.length / 2) {
+            localStorage.clear();
+            const clean1= document.querySelector(".table-container");
+            const clean2= document.querySelector(".user-table");
+            ganar.className="alerta";
+            ganar.innerText="Ganaste! Haz click para volver a jugar"
+            div.appendChild(ganar);
+            clean1.remove();
+            clean2.remove();
 
-function aleatorio(){
-    const elemento1 = numeros[Math.floor(Math.random() * numeros.length)];
-    alert ('Elemento: '+ elemento1 + ' en la posicion: '+ numeros.indexOf(elemento1));
-    usuario1.conteoPistas();
-}
-
-do{
-    seleccion1();
-    if (usuario1.hints > 0){
-        alert ('Tienes '+ usuario1.hints+' pistas para usar.');
-        let opcionPista= prompt ('Opciones: \n 1. Descubrir un elemento especifico \n 2. Descubrir un elemento aleatorio. \n 3. No usar pistas');
-        switch(opcionPista){
-            case '1':
-                encontrar();
-                break;
-            case '2':
-                aleatorio();
-                break;
-            case '3':
-                break;
-            default:
-            alert ('Opcion incorrecta');
+            ganar.addEventListener("click", initGame);
+            
+            
         }
-    }else{ 
-        alert('Ya no tienes pistas');
+    }else{
+        tableContainer({cartas:cards});
+        cardUp = [];
     }
-    seleccion2();
-    comparar();
-}while (encontrados < 5);
-if(encontrados===5){
-    usuario1.ganaste();
-    alert ('Ganaste!')
-}*/
+    
+}
+
+function selection(cart){
+    const newDiscover = document.querySelector(".table-container");
+    const discover = Array.from(newDiscover.children);
+    message.className ="content";
+    message.innerText = cart.id;
+    cards.forEach(element => {
+        if (element === cart){
+            dato= element;
+        }
+    });
+
+    const select= () => {
+        if (cardUp.length < 2 && !cardUp.includes(cart) && !posicion.includes(cart)) {
+            cardUp.push(cart);
+            discover.forEach(element1 => {
+                if(cards.indexOf(dato)===discover.indexOf(element1)){
+                    element1.appendChild(message);
+                }
+            });
+        }
+    }
+    if (cardUp.length === 2) {
+        comparar();
+    }else{
+        select();
+    }
+}
+
+function initGame(){
+    message.className="start";
+    message.innerText = "Haz click para empezar a jugar";
+    div.appendChild(message);
+    message.addEventListener("click", userData);
+
+    if (data){
+        message.remove();
+        ganar.remove();
+        shuffle(cards);
+        userTable();
+        div.appendChild(tableContainer({cartas:cards}));
+    }
+} 
+
+initGame();
