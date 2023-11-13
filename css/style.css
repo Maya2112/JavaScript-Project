@@ -139,6 +139,7 @@ footer{
     width: 100px;
     height: 50px;
     color:goldenrod;
+    background-color: rgb(83, 79, 79);
     border-radius: 5px;
     font-size: 35px;
     box-shadow: 1px 1px 1px 1px rgba(218, 165, 32, 0.788);
@@ -161,13 +162,29 @@ footer{
     box-shadow: black 0px 10px 36px 0px, black 0px 0px 0px 1px;
 }
 
-.card-content img {
+#card-img {
     width: 150px;
     height: 100%;
     object-fit: cover;
 }
 
-.content{
+@keyframes fadeOut {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.fadeOut img{
+    width: 150px;
+    height: 100%;
+    object-fit: cover;
+    animation: fadeOut 0.3s ease-in-out forwards;
+}
+
+.fadeIn{
     width: 150px;
     height: 50%;
     text-align: center;
@@ -175,11 +192,18 @@ footer{
     color: goldenrod;
     background-color: grey;
     box-shadow: black 0px 10px 36px 0px, black 0px 0px 0px 1px;
+    animation: vanish 0.3s ease-in-out forwards;
+}
+
+.fadeIn img{
+    width: 150px;
+    height: 100%;
+    object-fit: cover;
+    animation: vanish 0.3s ease-in-out forwards;
 }
 
 .alerta{
-    position: relative;
-    font-size: 70px;
-    text-shadow: black 1px 0 10px;
+    text-align: center;
+    font-size: 50px;
     color: goldenrod;
 }
